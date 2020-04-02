@@ -4,3 +4,5 @@
 .Ruserdata
 data/counties.csv
 *.Rproj
+rsconnect/shinyapps.io/jtwalsh/COVIDXIX.dcf
+*.dcf

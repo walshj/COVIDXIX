@@ -1,18 +1,11 @@
-#
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
+# COVIDXIX dashboard base on NYT data that they compile daily. Will always pull latest data set
+# County data geometry modified to account for NYT merging of all buroughs.
 
 library(shiny)
 library(sf)
 library(dplyr)
 library(readr)
 library(leaflet) # for interactive maps
-# library(leaflet.extras)
 library(tigris)
 library(shinydashboard)
 
