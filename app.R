@@ -44,27 +44,45 @@ ui <- dashboardPage( skin = "red",
                     )
         ),
     dashboardBody(
-        fluidPage(title = "Based on NYT Data",
-            tabBox(selected = 'Cases and Deaths',
-                   width = 8, 
-                tabPanel(title = 'Cases and Deaths',
-                         leafletOutput("county_map"),
-                         radioButtons(inputId = 'metrics_select',
-                                      label = 'Select Metric',
-                                      choiceNames = c('Cases','Deaths', 'New Cases', 'New Deaths'),
-                                      choiceValues = c('cases','deaths', 'new_cases', 'new_deaths'),
-                                      selected = "cases"),
-                         checkboxInput('county_select',
-                                       label = "Show county map?*",
-                                       value = FALSE),
-                         "*Takes a little bit to load"
-                         ),
-                tabPanel(title = 'Death Rate',
-                         leafletOutput('county_dr'))
-                )
+        fluidPage(
+                  fluidRow(
+                    tabBox(selected = 'Cases and Deaths',
+                           width = 12, 
+                        tabPanel(title = 'Cases and Deaths',
+                                 leafletOutput("county_map"),
+                                 radioButtons(inputId = 'metrics_select',
+                                              label = 'Select Metric',
+                                              choiceNames = c('Cases','Deaths', 'New Cases', 'New Deaths'),
+                                              choiceValues = c('cases','deaths', 'new_cases', 'new_deaths'),
+                                              selected = "cases"),
+                                 checkboxInput('county_select',
+                                               label = "Show county map?*",
+                                               value = FALSE),
+                                 "*Takes a little bit to load"
+                                 ) 
+                        #Not quite there yet. Gonna work on scale later.
+                        #,
+                        # tabPanel(title = 'Death Rate',
+                        #          leafletOutput('county_dr')
+                        #          )
+                        )
+                    ),
+                  fluidRow(
+                      box(
+                          width = 6,
+                          "This map will contain updated data from the New York Times investigations into the spread of Covid-19.",
+                          "Data collection and methods can be found on their github: ", tags$a(href="https://github.com/nytimes/covid-19-data", "https://github.com/nytimes/covid-19-data")
+                      ),
+                  # ),
+                  # fluidRow(
+                      box(
+                          width = 6,
+                          "The code for this project can be found on my github: ", tags$a(href="https://github.com/walshj/COVIDXIX", "https://github.com/walshj/COVIDXIX")
+                      )
+                  )
+                  )
         )
     )
-)
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
@@ -90,14 +108,6 @@ server <- function(input, output) {
                palette = heating(7),
                reverse=FALSE
            )
-           
-           qpal <-
-               colorNumeric(
-                   domain = NULL,
-                   palette = heating(100),
-                   reverse=FALSE
-               )
-           
             if(input$county_select){
                 leaflet(data=chosen_data()) %>%
                     addTiles() %>%
@@ -115,8 +125,8 @@ server <- function(input, output) {
                           opacity = 1
                 )
                     
-            } else{
-           leaflet(data=chosen_data()) %>%
+            } else {
+           leaflet(data = chosen_data()) %>%
                addTiles() %>%
                addMarkers(group="metric",
                           data=st_point_on_surface(chosen_data()),
@@ -150,7 +160,12 @@ server <- function(input, output) {
        })
      output$county_dr <- 
          renderLeaflet({
-             
+             heating <- colorRampPalette(c("blue","yellow","orange","red"), bias=.8)
+             pal <- colorNumeric(
+                 domain = NULL,
+                 palette = heating(7),
+                 reverse=FALSE
+             )
              leaflet(data=chosen_data()) %>%
                  addTiles() %>%
                  addPolygons(group = 'base_map', data = covid_counties_map[covid_counties_map$date == chosen_date(),], weight = .5, fillOpacity=0.2) %>%

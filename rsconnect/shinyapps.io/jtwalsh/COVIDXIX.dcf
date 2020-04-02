@@ -5,9 +5,9 @@ account: jtwalsh
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2039578
-bundleId: 2956694
+bundleId: 2956867
 url: https://jtwalsh.shinyapps.io/COVIDXIX/
-when: 1585788289.98747
+when: 1585791955.18842
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: .gitattributes|.RData|README.md|data/counties.csv
